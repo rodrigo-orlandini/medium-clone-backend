@@ -18,7 +18,11 @@ app.use(express.json());
 
 // Setting up cors to access application in restricted urls 
 app.use(cors({
-    origin: ['http://localhost:3333', `http://localhost:${port}`]
+    origin: [
+        'http://localhost:3333', 
+        `http://localhost:${port}`,  
+        "https://api-medium-clone.herokuapp.com/"
+    ]
 }));
 
 // Bringing routes to add to application
