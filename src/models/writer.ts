@@ -8,6 +8,7 @@ export interface WriterProps {
     avatarUrl?: string;
 }
 
+// Creating writer model
 export const Writer = sequelize.define('writer', {
     name: {
         type: types.STRING,
@@ -19,13 +20,16 @@ export const Writer = sequelize.define('writer', {
     }
 }, { timestamps: false });
 
+// Creating Topic - Post relationship 
 Writer.hasMany(Post);
 Post.belongsTo(Writer);
 
+// Writer table creation
 export const writerBootstrap = async () => {
     await Writer.sync({ force: true });
 }
 
+// Writer table creation
 export const writerSync = async () => {
     await Writer.sync();
 }

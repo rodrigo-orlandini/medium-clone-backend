@@ -2,6 +2,7 @@ import { Sequelize, DataTypes } from "sequelize";
 
 import databaseConfig from "../../database.config";
 
+// Creating sequelize instance and setting up database
 export const sequelize = new Sequelize(
     databaseConfig.database, 
     databaseConfig.username, 
@@ -18,4 +19,5 @@ export const sequelize = new Sequelize(
     }
 );
 
+// Exporting data types from sequelize to use in models
 export const types = DataTypes;

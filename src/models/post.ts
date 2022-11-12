@@ -13,6 +13,7 @@ export interface PostProps {
     topicId: number
 }
 
+// Creating post model
 export const Post = sequelize.define('post', {
     title: {
         type: types.STRING,
@@ -44,10 +45,12 @@ export const Post = sequelize.define('post', {
     }
 }, { timestamps: false }); 
 
+// Post table creation
 export const postBootstrap = async () => {
     await Post.sync({ force: true });
 }
 
+// Post table syncing
 export const postSync = async () => {
     await Post.sync();
 }

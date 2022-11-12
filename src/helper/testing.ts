@@ -6,6 +6,7 @@ import { WriterProps } from "../models/writer";
 import { PostProps } from "../models/post";
 import { TopicProps } from "../models/topic";
 
+// Finding a register by writer name, post title or topic label
 export const getInstanceId = async (instance: 'writer' | 'post' | 'topic', search: string) => {
     const { body } = await request(app).get(`/${instance}`);
     
@@ -43,6 +44,7 @@ interface DeleteProps {
     message: 'Writer deleted' | 'Post deleted' | 'Topic deleted';
 }
 
+// Templates to execute HTTP requests during tests
 export const TestSuiteTemplate = {
     get200: async ({ route }: GetProps) => {
         await request(app).get(route)

@@ -7,6 +7,7 @@ export interface TopicProps {
     label: string;
 }
 
+// Creating topic model
 export const Topic = sequelize.define('topic', {
     label: {
         type: types.STRING,
@@ -15,13 +16,16 @@ export const Topic = sequelize.define('topic', {
     }
 }, { timestamps: false });
 
+// Creating Topic - Post relationship
 Topic.hasMany(Post);
 Post.belongsTo(Topic);
 
+// Topic table creation
 export const topicBootstrap = async () => {
     await Topic.sync({ force: true });
 }
 
+// Topic table syncing
 export const topicSync = async () => {
     await Topic.sync();
 }

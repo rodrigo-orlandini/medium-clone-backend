@@ -18,3 +18,5 @@ Plus it be a backend service, this API is been used also in the Medium Clone (Fr
 - [*POST*] **/post:** Endpoint to add a new post. It requires title (*string*), description (*string optional*), imageUrl (*string*), readingTime (*number*), numOfLike (*number*), content (*string*), writerId (*number*) and topicId (*number*) in JSON body;
 - [*PUT*] **/post/:id:** Endpoint to update data of an already registred post. It can recieve one or more of these params in JSON body: title (*string*), description (*string*), imageUrl (*string*), readingTime (*number*), numOfLike (*number*), content (*string*) or topicId (*number*);
 - [*DELETE*] **/post/:id:** Endpoint to delete a post.
+<br>
+- [*GET*] **/home:** Endpoint to get all information that is used in home page;
