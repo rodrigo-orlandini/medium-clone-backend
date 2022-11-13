@@ -17,9 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Setting up cors to access application in restricted urls 
-app.use(cors({
-    origin: "*"
-}));
+app.use(cors());
 
 // Bringing routes to add to application
 app.use(writerRouter);
