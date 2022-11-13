@@ -18,10 +18,7 @@ app.use(express.json());
 
 // Setting up cors to access application in restricted urls 
 app.use(cors({
-    origin: [
-        "https://hoppscotch.io/",   // Rest Client
-        "http://localhost:3000",    // Frontend application
-    ]
+    origin: "*"
 }));
 
 // Bringing routes to add to application
