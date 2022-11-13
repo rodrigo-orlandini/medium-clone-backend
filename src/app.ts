@@ -17,7 +17,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Setting up cors to access application in restricted urls 
-app.use(cors());
+app.use(cors({
+    origin: [
+        "http://localhost:3000",
+        "https://hoppscotch.io"
+    ]
+}));
 
 // Bringing routes to add to application
 app.use(writerRouter);
