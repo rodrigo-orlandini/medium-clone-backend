@@ -19,16 +19,24 @@ export const getInstanceId = async (instance: 'writer' | 'post' | 'topic', searc
     }
 }
 
+
 interface GetProps {
-    route: '/writer' | '/post' | '/topic';
+    route: '/writer' | '/post' | '/topic' | '/home';
+}
+interface Post200Props {
+    route: '/signin';
+    data: WriterProps;
 }
 interface Post201Props {
-    route: '/writer' | '/post' | '/topic';
+    route: '/writer' | '/post' | '/topic' | '/signup';
     data: WriterProps | PostProps | TopicProps;
     message: 'Writer created' | 'Post created' | 'Topic created';
 }
 interface Post400Props {
-    route: '/writer' | '/post' | '/topic';
+    route: '/writer' | '/post' | '/topic' | '/signup' | '/signin';
+}
+interface Post404Props {
+    route: '/signin';
 }
 interface PutProps {
     route: '/writer' | '/post' | '/topic';
@@ -50,6 +58,10 @@ export const TestSuiteTemplate = {
         await request(app).get(route)
             .expect(200);
     },
+    post200: async ({ route, data }: Post200Props) => {
+        const response = await request(app).post(route).send({ ...data })
+            .expect(200);
+    },
     post201: async ({ route, data, message }: Post201Props) => {
         const response = await request(app).post(route).send({ ...data })
             .expect(201);
@@ -66,13 +78,30 @@ export const TestSuiteTemplate = {
 
         expect(response.body).toEqual(
             expect.objectContaining({
-                message: "Some parameter is lefting"
+                message: "Some parameter is lefting" || "Writer already exists" || "Incorrect password"
+            })
+        );
+    },
+    post404: async ({ route }: Post404Props) => {
+        const response = await request(app).post(route).send({ 
+            name: "nameNeverUsedBefore123456789", 
+            password: "any"
+        }).expect(404);
+
+        expect(response.body).toEqual(
+            expect.objectContaining({
+                message: "Writer not found"
             })
         );
     },
     put: async ({ route, item, message }: PutProps) => {
-        const response = await request(app).put(`${route}/${item.id}`).send(item.body)
-            .expect(200);
+        if(route === "/writer") {
+            var response = await request(app).put(`${route}`).send(item.body).set("Authorization", `Bearer ${item.id}`)
+                .expect(200);
+        } else {
+            var response = await request(app).put(`${route}/${item.id}`).send(item.body)
+                .expect(200);
+        }
 
         expect(response.body).toEqual(
             expect.objectContaining({
@@ -81,8 +110,13 @@ export const TestSuiteTemplate = {
         );
     },
     delete: async ({ route, id, message }: DeleteProps) => {
-        const response = await request(app).delete(`${route}/${id}`)
-            .expect(200);
+        if(route === "/writer") {
+            var response = await request(app).delete(`${route}`).set("Authorization", `Bearer ${id}`)
+                .expect(200);
+        } else {
+            var response = await request(app).delete(`${route}/${id}`)
+                .expect(200);
+        }
 
         expect(response.body).toEqual(
             expect.objectContaining({

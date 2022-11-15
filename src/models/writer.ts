@@ -5,6 +5,7 @@ import { Post } from "./post";
 export interface WriterProps {
     id?: number;
     name: string;
+    password?: string;
     avatarUrl?: string;
 }
 
@@ -14,6 +15,10 @@ export const Writer = sequelize.define('writer', {
         type: types.STRING,
         allowNull: false,
         unique: true
+    },
+    password: {
+        type: types.STRING,
+        allowNull: false
     },
     avatarUrl: {
         type: types.STRING

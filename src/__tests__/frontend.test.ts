@@ -1,10 +1,7 @@
-import request from "supertest";
-
-import app from '../app';
+import { TestSuiteTemplate } from "../helper/testing";
 
 describe('Home', () => {
     it('GET /home', async () => {
-        await request(app).get('/home')
-            .expect(200);
+        await TestSuiteTemplate.get200({ route: "/home" });
     });
 });

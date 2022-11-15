@@ -1,10 +1,11 @@
 import express from 'express';
 import cors from 'cors';
 
-import writerRouter from './routes/writer'
-import postRouter from './routes/post'
-import topicRouter from './routes/topic'
-import frontendRouter from './routes/frontend'
+import writerRouter from './routes/writer';
+import postRouter from './routes/post';
+import topicRouter from './routes/topic';
+import frontendRouter from './routes/frontend';
+import authRouter from './routes/auth';
 
 // Setting port that server will run
 export const port = process.env.PORT || 3333;
@@ -29,5 +30,6 @@ app.use(writerRouter);
 app.use(postRouter);
 app.use(topicRouter);
 app.use(frontendRouter);
+app.use(authRouter);
 
 export default app;

@@ -1,10 +1,14 @@
+import request from 'supertest';
+
+import app from '../app';
 import { getInstanceId, TestSuiteTemplate } from '../helper/testing';
 
 describe('Writer', () => {
 
     const data = {
         name: String(Math.round(Math.random() * 9999)),
-        avatarUrl: "https://github.com/rodrigo-orlandini.png"
+        avatarUrl: "https://github.com/rodrigo-orlandini.png",
+        password: "1234"
     }
     const newName = String(Math.round(Math.random() * 9999));
 
@@ -14,22 +18,44 @@ describe('Writer', () => {
         });
     });
 
-    it('POST /writer', async () => {
+    it('POST /signup 201', async () => {
         await TestSuiteTemplate.post201({
-            route: '/writer', 
+            route: '/signup', 
             data: data, 
             message: "Writer created"
         });
     });
 
-    it('POST /post 400', async () => {
+    it('POST /signup 400', async () => {
         await TestSuiteTemplate.post400({
-            route: '/writer'
+            route: '/signup'
         });
     });
 
-    it('PUT /writer/:id', async () => {
-        const id = await getInstanceId("writer", data.name);
+    it('POST /signin 200', async () => {
+        await TestSuiteTemplate.post200({
+            route: '/signin', 
+            data: data
+        });
+    });
+
+    it('POST /signin 400', async () => {
+        await TestSuiteTemplate.post400({
+            route: '/signin'
+        });
+    });
+
+    it('POST /signin 404', async () => {
+        await TestSuiteTemplate.post404({
+            route: '/signin'
+        });
+    });
+
+    it('PUT /writer', async () => {
+        const response = await request(app).post("/signin").send(data)
+            .expect(200);
+
+        const id = response.body.jwt;
         
         await TestSuiteTemplate.put({
             route: '/writer',
@@ -38,8 +64,11 @@ describe('Writer', () => {
         });
     });
 
-    it('DELETE /writer/:id', async () => {
-        const id = await getInstanceId("writer", newName);
+    it('DELETE /writer', async () => {
+        const response = await request(app).post("/signin").send({ ...data, name: newName })
+            .expect(200);
+
+        const id = response.body.jwt;
 
         await TestSuiteTemplate.delete({
             route: '/writer',

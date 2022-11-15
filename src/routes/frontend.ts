@@ -5,7 +5,7 @@ import { Topic } from '../models/topic';
 import { Writer } from '../models/writer';
 
 // /home endpoint to get all information that is used in home 
-router.get('/home', async (_req, res) => {
+router.get('/home', async (req, res) => {    
     // Getting posts ordered by number of likes
     const posts = await Post.findAll({
         order: [["numOfLike", "DESC"]],

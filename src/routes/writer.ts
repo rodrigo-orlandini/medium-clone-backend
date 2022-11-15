@@ -3,6 +3,8 @@ import { z } from 'zod';
 
 import { Writer } from '../models/writer'
 
+import { authenticate } from '../helper/authentication';
+
 // /writer endpoint to get all writers
 router.get('/writer', async (_req, res) => {
     // Getting all writers
@@ -10,41 +12,16 @@ router.get('/writer', async (_req, res) => {
     res.send(writers);
 });
 
-// /writer endpoint to create a new writer
-router.post('/writer', async (req, res) => {
-    // Creating a schema to parse writer data
-    const createWriterBody = z.object({
-        name: z.string(),
-        avatarUrl: z.string().optional()
-    });
-
-    // Parsing data from JSON body and checking params
-    const parse = createWriterBody.safeParse(req.body);
-    if(!parse.success) {
-        res.status(400).send({ message: "Some parameter is lefting" });
-        return;
-    }
-
-    const { name, avatarUrl } = parse.data;
-
-    // Creating a new writer in database
-    await Writer.create({
-        name,
-        avatarUrl
-    });
-
-    res.status(201).send({ message: "Writer created" });
-});
-
 // /writer endpoint to update a writer
-router.put('/writer/:id', async (req, res) => {
-    // Creating a schema to parse writer data from url params
-    const updateWriterParams = z.object({
-        id: z.string()
-    });
+router.put('/writer', async (req, res) => {
+    // Getting 'Authorization: Bearer ...' (jwt token)
+    const token = req.headers.authorization?.split(' ')[1];
+    const auth = authenticate({ token });
 
-    // Parsing data from url params
-    const { id } = updateWriterParams.parse(req.params);
+    // Checking token
+    if(auth.status !== 200) {
+        return res.status(auth.status).send({ message: auth.data.message });
+    }
 
     // Creating a schema to parse writer data from JSON body
     const updateWriterBody = z.object({
@@ -60,24 +37,29 @@ router.put('/writer/:id', async (req, res) => {
         name, 
         avatarUrl
     }, {
-        where: { id }
+        where: { id: auth.data.id }
     });
 
     res.send({ message: "Writer updated" });
 });
 
 // /writer endpoint to delete a writer
-router.delete('/writer/:id', async (req, res) => {
-    // Creating a schema to parse writer data
-    const deleteWriterParams = z.object({
-        id: z.string()
-    });
+router.delete('/writer', async (req, res) => {
+    // Getting 'Authorization: Bearer ...' (jwt token)
+    const token = req.headers.authorization?.split(' ')[1];
+    const auth = authenticate({ token });
 
-    // Parsing data from url params
-    const { id } = deleteWriterParams.parse(req.params);
+    // Checking token
+    if(auth.status !== 200) {
+        return res.status(auth.status).send({ message: auth.data.message });
+    }
 
     // Finding and deleting a writer
-    await Writer.destroy({ where: { id }});
+    await Writer.destroy({ 
+        where: { 
+            id: auth.data.id
+        }
+    });
 
     res.send({ message: "Writer deleted" });
 });

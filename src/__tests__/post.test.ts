@@ -1,6 +1,6 @@
 import { getInstanceId, TestSuiteTemplate } from '../helper/testing';
 
-describe('Writer', () => {
+describe('Post', () => {
 
     const data = {
         title: String(Math.round(Math.random() * 9999)),
@@ -9,7 +9,7 @@ describe('Writer', () => {
         readingTime: 10,
         numOfLike: 60,
         content: "",
-        topicId: 1,
+        topicId: 14,
         writerId: 1
     }
     const newTitle = String(Math.round(Math.random() * 9999));
