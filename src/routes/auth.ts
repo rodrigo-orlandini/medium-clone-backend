@@ -99,4 +99,18 @@ router.post("/signin", async (req, res) => {
     }
 });
 
+// /me endpoint to get writer data
+router.get("/me", (req, res) => {
+    // Getting 'Authorization: Bearer ...' (jwt token)
+    const token = req.headers.authorization?.split(' ')[1];
+    const auth = authenticate({ token });
+
+    // Checking token
+    if(auth.status !== 200) {
+        return res.status(auth.status).send({ message: auth.data.message });
+    }
+
+    return res.status(200).send({ ...auth.data });
+});
+
 export default router;

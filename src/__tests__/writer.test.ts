@@ -51,6 +51,18 @@ describe('Writer', () => {
         });
     });
 
+    it('GET /me', async () => {
+        const response = await request(app).post("/signin").send(data)
+            .expect(200);
+
+        const token = response.body.jwt;
+
+        await TestSuiteTemplate.get200({
+            route: '/me',
+            token
+        });
+    });
+
     it('PUT /writer', async () => {
         const response = await request(app).post("/signin").send(data)
             .expect(200);

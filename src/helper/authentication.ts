@@ -21,7 +21,7 @@ export const authenticate = ({ token }: AuthenticateProps) => {
         return {
             status: 200,
             // @ts-ignore
-            data: { id: decoded.id }
+            data: { ...decoded }
         };
     } catch(error) {    
         console.error(error);

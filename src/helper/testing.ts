@@ -21,7 +21,8 @@ export const getInstanceId = async (instance: 'writer' | 'post' | 'topic', searc
 
 
 interface GetProps {
-    route: '/writer' | '/post' | '/topic' | '/home';
+    route: '/writer' | '/post' | '/topic' | '/home' | '/me';
+    token?: string;
 }
 interface Post200Props {
     route: '/signin';
@@ -54,9 +55,14 @@ interface DeleteProps {
 
 // Templates to execute HTTP requests during tests
 export const TestSuiteTemplate = {
-    get200: async ({ route }: GetProps) => {
-        await request(app).get(route)
+    get200: async ({ route, token }: GetProps) => {
+        if(token) {
+            await request(app).get(route).set("Authorization", `Bearer ${token}`)
             .expect(200);
+        } else {
+            await request(app).get(route)
+            .expect(200);
+        }
     },
     post200: async ({ route, data }: Post200Props) => {
         const response = await request(app).post(route).send({ ...data })
